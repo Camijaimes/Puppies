@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/back"
-    tools:context=".login">
+    tools:context=".loginpersona">
 
     <EditText
         android:id="@+id/etusuario"
@@ -35,7 +35,7 @@
         android:layout_marginBottom="63dp"
         android:ems="10"
         android:hint="Contraseña"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         app:fontFamily="cursive"
         app:layout_constraintBottom_toTopOf="@+id/btningresar"
         app:layout_constraintEnd_toEndOf="parent"

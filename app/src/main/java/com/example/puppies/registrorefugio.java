@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class registrorefugio extends AppCompatActivity {
     EditText etemail,ettelefono,etusuario, etcontra;
-    TextView etpersona, etvolver;
+    TextView etpersona;
     Button btnregistrar;
     private RequestQueue requestQueue;
 
@@ -38,7 +38,6 @@ public class registrorefugio extends AppCompatActivity {
         etcontra=findViewById(R.id.etcontra);
         btnregistrar=findViewById(R.id.btnregistrar);
         etpersona=findViewById(R.id.etpersona);
-        etvolver=findViewById(R.id.etvolver);
 
         etpersona.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +46,7 @@ public class registrorefugio extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
-        etvolver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
+
 
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +60,7 @@ public class registrorefugio extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),"Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
                 limpiarFomulario();
             }
         }, new Response.ErrorListener() {

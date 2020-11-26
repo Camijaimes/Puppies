@@ -1,23 +1,31 @@
 package com.example.puppies;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +33,11 @@ public class loginpersona extends AppCompatActivity {
     EditText etusuario, etpass;
     Button btningresar;
     TextView etrefugio;
+
+
+    CookieManager sesion= CookieManager.getInstance();
+
+    RequestQueue requestQueue;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,39 +59,43 @@ public class loginpersona extends AppCompatActivity {
         btningresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               validar("https://proyectopuppies.000webhostapp.com/loginpersona.php");
+               login();
             }
         });
 
 
     }
 
-    private void validar(String URL){
-        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (!response.isEmpty()) {
-                    Intent intent = new Intent(getApplicationContext(), iniciopersona.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(loginpersona.this, "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
+    public void login(){
+        StringRequest request= new StringRequest(Request.Method.POST,"https://proyectopuppies.000webhostapp.com/loginpersona.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    if (response.contains("1")){
+                        startActivity(new Intent(getApplicationContext(),iniciopersona.class));
+                        limpiarFomulario();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
+                    }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(loginpersona.this, error.toString(), Toast.LENGTH_SHORT).show();
+
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> parametros=new HashMap<String,String>();
-                parametros.put("usuario",etusuario.getText().toString());
-                parametros.put("pass",etpass.getText().toString());
-                return parametros;
+              Map<String,String> params = new HashMap<>();
+              params.put("usuario",etusuario.getText().toString());
+              params.put("pass",etpass.getText().toString());
+              return params;
             }
         };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        Volley.newRequestQueue(this).add(request);
+    }
+    private void limpiarFomulario(){
+        etusuario.setText("");
+        etpass.setText("");
     }
 }

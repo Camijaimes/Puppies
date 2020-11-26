@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class registropersona extends AppCompatActivity {
     EditText etnombre,etapellido,etemail,ettelefono,etusuario, etcontra;
-    TextView etrefugio, etvolver;
+    TextView etrefugio;
     Button btnregistrar;
 
     RequestQueue requestQueue;
@@ -39,7 +39,7 @@ public class registropersona extends AppCompatActivity {
         etcontra=findViewById(R.id.etcontra);
         btnregistrar=findViewById(R.id.btnregistrar);
         etrefugio=findViewById(R.id.etrefugio);
-        etvolver=findViewById(R.id.etvolver);
+
         etrefugio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,13 +48,6 @@ public class registropersona extends AppCompatActivity {
             }
         });
 
-        etvolver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +62,7 @@ public class registropersona extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),"Operacion Exitosa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
                 limpiarFomulario();
             }
         }, new Response.ErrorListener() {

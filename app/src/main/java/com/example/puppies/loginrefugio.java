@@ -47,37 +47,41 @@ public class loginrefugio extends AppCompatActivity {
         btingresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar("https://proyectopuppies.000webhostapp.com/loginrefugio.php");
+                login();
             }
         });
     }
 
-    private void validar(String URL){
-        StringRequest stringRequest= new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (!response.isEmpty()) {
-                    Intent intent = new Intent(getApplicationContext(), iniciopersona.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(loginrefugio.this, "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
+    public void login(){
+        StringRequest request= new StringRequest(Request.Method.POST,"https://proyectopuppies.000webhostapp.com/loginrefugio.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.contains("1")){
+                            startActivity(new Intent(getApplicationContext(),iniciopersona.class));
+                            limpiarFomulario();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(loginrefugio.this, error.toString(), Toast.LENGTH_SHORT).show();
+
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> parametros=new HashMap<String,String>();
-                parametros.put("nom_refugio",etusuario.getText().toString());
-                parametros.put("pass_refugio",etcontra.getText().toString());
-                return parametros;
+                Map<String,String> params = new HashMap<>();
+                params.put("usuario",etusuario.getText().toString());
+                params.put("pass",etcontra.getText().toString());
+                return params;
             }
         };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        Volley.newRequestQueue(this).add(request);
+    }
+    private void limpiarFomulario(){
+        etusuario.setText("");
+        etcontra.setText("");
     }
 }
